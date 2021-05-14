@@ -118,6 +118,15 @@ function App() {
 			long: -118.2437,
 			key: "nofire",
 			confidence: 0
+		},
+		{
+			id: 2,
+			src: "./videos/yosemite.mp4",
+			location: "Yosemite, CA",
+			lat: 37.8651,
+			long: -119.5383,
+			key: "nofire",
+			confidence: 0
 		}
 	])
 	const [activity, setActivity] = useState([])
