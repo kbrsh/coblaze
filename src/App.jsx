@@ -25,6 +25,7 @@ const predict = data => {
 	})
 }
 
+const formatTime = time => new Date(time).toLocaleTimeString("en-US")
 const formatConfidence = confidence =>
 	Math.round(confidence * 100 * 100) / 100 + "%"
 const formatLat = lat => lat + (lat < 0 ? "° S" : "° N")
@@ -63,9 +64,9 @@ const updateSource = (
 				],
 				activity:
 					keyPrev === "nofire" && key === "fire"
-						? [...activity, sourceNew]
+						? [{ time: Date.now(), source: sourceNew }, ...activity]
 						: keyPrev === "fire" && key === "nofire"
-						? [...activity, sourceNew]
+						? [{ time: Date.now(), source: sourceNew }, ...activity]
 						: activity
 			}
 		})
@@ -158,20 +159,21 @@ function App() {
 			<MapChart markers={data} />
 			<div className="activity-container">
 				<h5>ACTIVITY</h5>
-				{activity.map(source => (
-					<div key={source.id.toString()} className="activity-alert">
+				{activity.map(alert => (
+					<div key={alert.source.id.toString()} className="activity-alert">
 						<svg height={40} width={40} className="activity-icon">
-							<Icon type={source.key} height={40} width={40} />
+							<Icon type={alert.source.key} height={40} width={40} />
 						</svg>
+						<p className="activity-time">{formatTime(alert.time)}</p>
 						<p className="activity-info">
-							{source.key === "fire"
+							{alert.source.key === "fire"
 								? "Wildfire detected in"
 								: "Wildfire extinguished in"}{" "}
-							{source.location} with{" "}
-							{formatConfidence(source.confidence)} confidence.
+							{alert.source.location} with{" "}
+							{formatConfidence(alert.source.confidence)} confidence.
 						</p>
 						<p className="activity-coordinates">
-							{formatLat(source.lat)}, {formatLong(source.long)}
+							{formatLat(alert.source.lat)}, {formatLong(alert.source.long)}
 						</p>
 					</div>
 				))}
