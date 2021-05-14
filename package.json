@@ -10,8 +10,7 @@
     "@tensorflow/tfjs": "^3.6.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
-    "react-simple-maps": "^2.3.0",
-    "topojson-client": "^3.1.0"
+    "react-simple-maps": "^2.3.0"
   },
   "devDependencies": {
     "@rollup/plugin-eslint": "^8.0.1",
