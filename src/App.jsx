@@ -39,7 +39,7 @@ const updateSource = (
 	videosElement,
 	canvasElement
 ) => {
-	const videoElements = videosElement.getElementsByClassName("video-source")
+	const videoElements = videosElement.getElementsByClassName("stream-video")
 	const ctx = canvasElement.getContext("2d")
 	const source = data[i]
 	const videoElement = videoElements[source.id]
@@ -167,25 +167,31 @@ function App() {
 				))}
 			</div>
 			<MapChart markers={data} />
-			<div ref={videosRef}>
+			<div ref={videosRef} className="stream-container">
 				{data.map(source => (
-					<div key={source.id.toString()}>
-						<p>
-							{source.location} {source.key}{" "}
-							{formatConfidence(source.confidence)}
-						</p>
+					<div key={source.id.toString()} className="stream">
 						<video
-							className="video-source"
+							className="stream-video"
 							src={source.src}
 							width={250}
 							height={250}
 							autoPlay={true}
 							muted={true}
 						/>
+						<p className="stream-location">
+							{source.location} ({formatLat(source.lat)},{" "}
+							{formatLong(source.long)})
+						</p>
+						<p className="stream-status">
+							{source.key === "fire"
+								? "Wildfire detected with"
+								: "No wildfire detected with"}{" "}
+							{formatConfidence(source.confidence)} confidence.
+						</p>
 					</div>
 				))}
 			</div>
-			<canvas ref={canvasRef} width={250} height={250} />
+			<canvas id="canvas" ref={canvasRef} width={250} height={250} />
 		</div>
 	)
 }
