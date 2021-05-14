@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import Worker from "./worker?worker"
 
 const model = Worker()
@@ -20,36 +20,40 @@ const predict = data => {
 	})
 }
 
+const formatConfidence = confidence => Math.round(confidence * 100 * 100) / 100 + "%"
+
 load()
 
 function App() {
 	const [prediction, setPrediction] = useState({})
 	const videoRef = useRef()
 	const canvasRef = useRef()
-	const loop = () => {
-		const videoElement = videoRef.current
-		const canvasElement = canvasRef.current
 
-		if (videoElement && canvasElement && !videoElement.paused && !videoElement.ended) {
-			const ctx = canvasElement.getContext("2d")
-			ctx.drawImage(videoElement, 0, 0)
-			predict(ctx.getImageData(0, 0, canvasElement.width, canvasElement.height)).then(data => {
-				const key = Object.keys(data.Confidences).reduce((a, b) => data.Confidences[a] > data.Confidences[b] ? a : b)
-				setPrediction({
-					key,
-					confidence: data.Confidences[key]
+	useEffect(() => {
+		setInterval(() => {
+			const videoElement = videoRef.current
+			const canvasElement = canvasRef.current
+
+			if (videoElement && canvasElement && !videoElement.paused && !videoElement.ended) {
+				const ctx = canvasElement.getContext("2d")
+				ctx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height)
+				predict(ctx.getImageData(0, 0, canvasElement.width, canvasElement.height)).then(data => {
+					const key = Object.keys(data.Confidences).reduce((a, b) => data.Confidences[a] > data.Confidences[b] ? a : b)
+					setPrediction({
+						key,
+						confidence: data.Confidences[key]
+					})
 				})
-			})
-		}
-	}
-	loop()
+			}
+		}, 1000)
+	}, [])
 
 	return (
 		<div>
 			<h1>coblaze</h1>
-			<video ref={videoRef} src="./videos/Forestfire.mp4" controls={true} onPlay={loop}/>
-			<canvas ref={canvasRef}/>
-			<p>{prediction.key} {prediction.confidence}</p>
+			<video ref={videoRef} src="./videos/Forestfire.mp4" width={250} height={250} controls={true} autoPlay={true} muted={true}/>
+			<canvas ref={canvasRef} width={250} height={250}/>
+			<p>{prediction.key} {formatConfidence(prediction.confidence)}</p>
 		</div>
 	)
 }
