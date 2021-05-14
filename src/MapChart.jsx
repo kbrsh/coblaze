@@ -5,6 +5,7 @@ import {
 	Geography,
 	Marker
 } from "react-simple-maps"
+import Icon from "./Icon"
 
 const geoUrl = "./maps/california.json"
 
@@ -30,13 +31,17 @@ const MapChart = ({ markers }) => {
 					))
 				}
 			</Geographies>
-			{markers.map(({ location, lat, long }) => (
+			{markers.map(({ key, location, lat, long }) => (
 				<Marker key={location} coordinates={[long, lat]}>
-					<circle r={3} fill="#F00" stroke="#fff" strokeWidth={2} />
+					<Icon type={key} x={-5} y={-5} width={10} height={10} />
 					<text
 						textAnchor="middle"
 						y={10}
-						style={{ fontSize: "5px", fontFamily: "system-ui", fill: "#5D5A6D" }}
+						style={{
+							fontSize: "5px",
+							fontFamily: "system-ui",
+							fill: "#5D5A6D"
+						}}
 					>
 						{location}
 					</text>
