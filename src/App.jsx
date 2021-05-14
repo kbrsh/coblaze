@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
+import MapChart from "./MapChart"
 import Worker from "./worker?worker"
 
 const model = Worker()
@@ -61,8 +62,8 @@ const updateSource = (i, data, setData, activity, setActivity, videosElement, ca
 
 function App() {
 	const [data, setData] = useState([
-		{id: 0, src: "./videos/Forestfire.mp4", location: "Dublin, CA", lat: 1, long: -1, key: "nofire", confidence: 0},
-		{id: 1, src: "./videos/Forest.mp4", location: "Dublin, CA", lat: 1, long: -1, key: "nofire", confidence: 0}
+		{id: 0, src: "./videos/Forestfire.mp4", location: "Dublin, CA", lat: 37.7159, long: -121.9101, key: "nofire", confidence: 0},
+		{id: 1, src: "./videos/Forest.mp4", location: "Los Angeles, CA", lat: 34.0522, long: -118.2437, key: "nofire", confidence: 0}
 	])
 	const [activity, setActivity] = useState([])
 	const videosRef = useRef()
@@ -85,12 +86,13 @@ function App() {
 			<div>
 				<h5>ACTIVITY</h5>
 				{activity.map(alert =>
-					<div>
+					<div key={alert.source.id.toString()}>
 						<h3>{alert.type}</h3>
 						<p>{alert.source.location}</p>
 					</div>
 				)}
 			</div>
+			<MapChart markers={data}/>
 			<div ref={videosRef}>
 				{data.map(source =>
 					<div key={source.id.toString()}>
