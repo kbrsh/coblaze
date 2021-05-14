@@ -22,38 +22,67 @@ const predict = data => {
 
 const formatConfidence = confidence => Math.round(confidence * 100 * 100) / 100 + "%"
 
+const updateSource = (i, data, setData, videosElement, canvasElement) => {
+	const videoElements = videosElement.getElementsByClassName("video-source")
+	const ctx = canvasElement.getContext("2d")
+	const source = data[i]
+	const videoElement = videoElements[source.id]
+	ctx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height)
+	return predict(ctx.getImageData(0, 0, canvasElement.width, canvasElement.height)).then(result => {
+		result = result.Confidences
+		const key = Object.keys(result).reduce((a, b) => result[a] > result[b] ? a : b)
+		return [
+			...data.slice(0, source.id),
+			{...data[source.id], key, confidence: result[key]},
+			...data.slice(source.id + 1)
+		];
+	}).then(data => {
+		i += 1
+		setData(data)
+		if (i < data.length) {
+			updateSource(i, data, setData, videosElement, canvasElement)
+		} else {
+			setTimeout(() => {
+				updateSource(0, data, setData, videosElement, canvasElement)
+			}, 1000)
+		}
+	})
+}
+
 load()
 
 function App() {
-	const [prediction, setPrediction] = useState({})
-	const videoRef = useRef()
+	const [data, setData] = useState([
+		{id: 0, src: "./videos/Forestfire.mp4", location: "Dublin, CA", lat: 1, long: -1, key: "Unknown", confidence: 0},
+		{id: 1, src: "./videos/Forest.mp4", location: "Dublin, CA", lat: 1, long: -1, key: "Unknown", confidence: 0}
+	])
+	const [prediction, setPrediction] = useState({key: "Unknown", confidence: 0})
+	const videosRef = useRef()
 	const canvasRef = useRef()
 
 	useEffect(() => {
-		setInterval(() => {
-			const videoElement = videoRef.current
-			const canvasElement = canvasRef.current
+		const videosElement = videosRef.current
+		const canvasElement = canvasRef.current
 
-			if (videoElement && canvasElement && !videoElement.paused && !videoElement.ended) {
-				const ctx = canvasElement.getContext("2d")
-				ctx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height)
-				predict(ctx.getImageData(0, 0, canvasElement.width, canvasElement.height)).then(data => {
-					const key = Object.keys(data.Confidences).reduce((a, b) => data.Confidences[a] > data.Confidences[b] ? a : b)
-					setPrediction({
-						key,
-						confidence: data.Confidences[key]
-					})
-				})
-			}
-		}, 1000)
+		if (videosElement && canvasElement) {
+			setTimeout(() => {
+				updateSource(0, data, setData, videosElement, canvasElement)
+			}, 2000)
+		}
 	}, [])
 
 	return (
 		<div>
 			<h1>coblaze</h1>
-			<video ref={videoRef} src="./videos/Forestfire.mp4" width={250} height={250} controls={true} autoPlay={true} muted={true}/>
+			<div ref={videosRef}>
+				{ data.map(source =>
+					<div key={source.id.toString()}>
+						<p>{source.location} {source.key} {formatConfidence(source.confidence)}</p>
+						<video className="video-source" src={source.src} width={250} height={250} autoPlay={true} muted={true}/>
+					</div>
+				)}
+			</div>
 			<canvas ref={canvasRef} width={250} height={250}/>
-			<p>{prediction.key} {formatConfidence(prediction.confidence)}</p>
 		</div>
 	)
 }
