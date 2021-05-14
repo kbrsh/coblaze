@@ -146,6 +146,7 @@ function App() {
 	return (
 		<div className="container">
 			<h1>coblaze</h1>
+			<MapChart markers={data} />
 			<div className="activity-container">
 				<h5>ACTIVITY</h5>
 				{activity.map(source => (
@@ -166,7 +167,6 @@ function App() {
 					</div>
 				))}
 			</div>
-			<MapChart markers={data} />
 			<div ref={videosRef} className="stream-container">
 				{data.map(source => (
 					<div key={source.id.toString()} className="stream">
