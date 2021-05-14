@@ -186,8 +186,9 @@ function App() {
 							src={source.src}
 							width={250}
 							height={250}
-							autoPlay={true}
 							muted={true}
+							playsInline={true}
+							autoPlay={true}
 						/>
 						<p className="stream-location">
 							{source.location} ({formatLat(source.lat)},{" "}
