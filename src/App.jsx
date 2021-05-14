@@ -144,23 +144,23 @@ function App() {
 	}, [])
 
 	return (
-		<div>
+		<div className="container">
 			<h1>coblaze</h1>
-			<div>
+			<div className="activity-container">
 				<h5>ACTIVITY</h5>
 				{activity.map(source => (
-					<div key={source.id.toString()}>
-						<svg height={40} width={40}>
+					<div key={source.id.toString()} className="activity-alert">
+						<svg height={40} width={40} className="activity-icon">
 							<Icon type={source.key} height={40} width={40} />
 						</svg>
-						<p>
+						<p className="activity-info">
 							{source.key === "fire"
 								? "Wildfire detected in"
 								: "Wildfire extinguished in"}{" "}
 							{source.location} with{" "}
 							{formatConfidence(source.confidence)} confidence.
 						</p>
-						<p>
+						<p className="activity-coordinates">
 							{formatLat(source.lat)}, {formatLong(source.long)}
 						</p>
 					</div>
