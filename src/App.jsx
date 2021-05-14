@@ -5,6 +5,9 @@ const model = Worker()
 
 const load = () => {
 	model.postMessage(["load", "/model/signature.json", "/model/model.json"])
+	return new Promise(resolve => {
+		model.onmessage = resolve
+	})
 }
 
 const dispose = () => {
@@ -49,8 +52,6 @@ const updateSource = (i, data, setData, videosElement, canvasElement) => {
 	})
 }
 
-load()
-
 function App() {
 	const [data, setData] = useState([
 		{id: 0, src: "./videos/Forestfire.mp4", location: "Dublin, CA", lat: 1, long: -1, key: "Unknown", confidence: 0},
@@ -65,9 +66,9 @@ function App() {
 		const canvasElement = canvasRef.current
 
 		if (videosElement && canvasElement) {
-			setTimeout(() => {
+			load().then(() => {
 				updateSource(0, data, setData, videosElement, canvasElement)
-			}, 2000)
+			})
 		}
 	}, [])
 

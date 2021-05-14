@@ -192,7 +192,7 @@ onmessage = data => {
 	data = data.data
 	switch (data[0]) {
 		case "load": {
-			load(data[1], data[2])
+			load(data[1], data[2]).then(postMessage)
 			break
 		}
 		case "dispose": {
