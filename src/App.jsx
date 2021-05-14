@@ -155,8 +155,10 @@ function App() {
 						</svg>
 						<p>
 							{source.key === "fire"
-								? `Wildfire detected in ${source.location}.`
-								: `Wildfire extinguished in ${source.location}.`}
+								? "Wildfire detected in"
+								: "Wildfire extinguished in"}{" "}
+							{source.location} with{" "}
+							{formatConfidence(source.confidence)} confidence.
 						</p>
 						<p>
 							{formatLat(source.lat)}, {formatLong(source.long)}
