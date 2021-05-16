@@ -28,8 +28,8 @@ const predict = data => {
 const formatTime = time => new Date(time).toLocaleTimeString("en-US")
 const formatConfidence = confidence =>
 	Math.round(confidence * 100 * 100) / 100 + "%"
-const formatLat = lat => lat + (lat < 0 ? "° S" : "° N")
-const formatLong = long => long + (long < 0 ? "° W" : "° E")
+const formatLat = lat => Math.abs(lat) + (lat < 0 ? "° S" : "° N")
+const formatLong = long => Math.abs(long) + (long < 0 ? "° W" : "° E")
 
 const updateSource = (
 	i,
