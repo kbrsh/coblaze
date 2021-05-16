@@ -155,28 +155,48 @@ function App() {
 
 	return (
 		<div className="container">
-			<h1>coblaze</h1>
-			<MapChart markers={data} />
-			<div className="activity-container">
-				<h5>ACTIVITY</h5>
-				{activity.map(alert => (
-					<div key={alert.source.id.toString()} className="activity-alert">
-						<svg height={40} width={40} className="activity-icon">
-							<Icon type={alert.source.key} height={40} width={40} />
-						</svg>
-						<p className="activity-time">{formatTime(alert.time)}</p>
-						<p className="activity-info">
-							{alert.source.key === "fire"
-								? "Wildfire detected in"
-								: "Wildfire extinguished in"}{" "}
-							{alert.source.location} with{" "}
-							{formatConfidence(alert.source.confidence)} confidence.
-						</p>
-						<p className="activity-coordinates">
-							{formatLat(alert.source.lat)}, {formatLong(alert.source.long)}
-						</p>
-					</div>
-				))}
+			<div className="head">
+				<h1>coblaze</h1>
+				<p>wildfire tracker</p>
+			</div>
+			<div className="main-view">
+				<MapChart markers={data} />
+				<div className="activity-container">
+					<h3>ACTIVITY</h3>
+					{activity.map(alert => (
+						<div
+							key={alert.source.id.toString()}
+							className="activity-alert"
+						>
+							<div className="activity-left">
+								<svg height={40} width={40} className="activity-icon">
+									<Icon
+										type={alert.source.key}
+										height={40}
+										width={40}
+									/>
+								</svg>
+								<p className="activity-time">
+									{formatTime(alert.time)}
+								</p>
+							</div>
+							<div className="activity-right">
+								<p className="activity-info">
+									{alert.source.key === "fire"
+										? "Wildfire detected in"
+										: "Wildfire extinguished in"}{" "}
+									{alert.source.location} with{" "}
+									{formatConfidence(alert.source.confidence)}{" "}
+									confidence.
+								</p>
+								<p className="activity-coordinates">
+									{formatLat(alert.source.lat)},{" "}
+									{formatLong(alert.source.long)}
+								</p>
+							</div>
+						</div>
+					))}
+				</div>
 			</div>
 			<h3>CAMERA VIEWS</h3>
 			<div ref={videosRef} className="stream-container">
@@ -185,8 +205,6 @@ function App() {
 						<video
 							className="stream-video"
 							src={source.src}
-							width={250}
-							height={250}
 							muted={true}
 							playsInline={true}
 							autoPlay={true}

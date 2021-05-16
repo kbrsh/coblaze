@@ -1,6 +1,7 @@
 import React from "react"
 import {
 	ComposableMap,
+	ZoomableGroup,
 	Geographies,
 	Geography,
 	Marker
@@ -13,40 +14,53 @@ const MapChart = ({ markers }) => {
 	return (
 		<ComposableMap
 			projection="geoAlbersUsa"
-			projectionConfig={
-				{
-					// scale: 400
-				}
-			}
+			projectionConfig={{
+				scale: 3000
+			}}
+			width={500}
+			height={700}
 		>
-			<Geographies geography={geoUrl}>
-				{({ geographies }) =>
-					geographies.map(geo => (
-						<Geography
-							key={geo.rsmKey}
-							geography={geo}
-							fill="#EAEAEC"
-							stroke="#D6D6DA"
-						/>
-					))
-				}
-			</Geographies>
-			{markers.map(({ key, location, lat, long }) => (
-				<Marker key={location} coordinates={[long, lat]}>
-					<Icon type={key} x={-5} y={-5} width={10} height={10} />
-					<text
-						textAnchor="middle"
-						y={10}
-						style={{
-							fontSize: "5px",
-							fontFamily: "system-ui",
-							fill: "#5D5A6D"
-						}}
-					>
-						{location}
-					</text>
-				</Marker>
-			))}
+			<ZoomableGroup center={[-119.44944, 37.16611]}>
+				<Geographies geography={geoUrl}>
+					{({ geographies }) =>
+						geographies.map(geo => (
+							<Geography
+								key={geo.rsmKey}
+								geography={geo}
+								fill="#004d1f"
+								stroke="none"
+								style={{
+									default: {
+										outline: "none"
+									},
+									hover: {
+										outline: "none"
+									},
+									pressed: {
+										outline: "none"
+									}
+								}}
+							/>
+						))
+					}
+				</Geographies>
+				{markers.map(({ key, location, lat, long }) => (
+					<Marker key={location} coordinates={[long, lat]}>
+						<Icon type={key} x={-10} y={-35} width={30} height={30} />
+						<text
+							textAnchor="middle"
+							y={10}
+							style={{
+								fontSize: "16px",
+								fontFamily: "system-ui",
+								fill: "#478560"
+							}}
+						>
+							{location}
+						</text>
+					</Marker>
+				))}
+			</ZoomableGroup>
 		</ComposableMap>
 	)
 }
