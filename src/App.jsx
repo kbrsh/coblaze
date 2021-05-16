@@ -178,6 +178,7 @@ function App() {
 					</div>
 				))}
 			</div>
+			<h3>CAMERA VIEWS</h3>
 			<div ref={videosRef} className="stream-container">
 				{data.map(source => (
 					<div key={source.id.toString()} className="stream">
