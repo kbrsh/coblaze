@@ -139,6 +139,14 @@ function App() {
 		const canvasElement = canvasRef.current
 
 		if (videosElement && canvasElement) {
+			const videoElements = videosElement.getElementsByClassName(
+				"stream-video"
+			)
+
+			for (const videoElement of videoElements) {
+				videoElement.playbackRate = 0.25
+			}
+
 			load().then(() => {
 				updateSource(
 					0,
