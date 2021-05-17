@@ -122,7 +122,7 @@ function App() {
 		},
 		{
 			id: 2,
-			src: "./videos/yosemite.mov",
+			src: "./videos/yosemite.mp4",
 			location: "Yosemite, CA",
 			lat: 37.8651,
 			long: -119.5383,
