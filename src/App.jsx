@@ -53,6 +53,9 @@ const updateSource = (
 			const key = Object.keys(result).reduce((a, b) =>
 				result[a] > result[b] ? a : b
 			)
+
+			if (result[key] < 0.90) return { data, activity }
+
 			const keyPrev = data[source.id].key
 			const sourceNew = { ...data[source.id], key, confidence: result[key] }
 
@@ -126,6 +129,33 @@ function App() {
 			location: "Yosemite, CA",
 			lat: 37.8651,
 			long: -119.5383,
+			key: "nofire",
+			confidence: 0
+		},
+		{
+			id: 3,
+			src: "./videos/3.mp4",
+			location: "Weitchpec, CA",
+			lat: 41.1877,
+			long: -123.704,
+			key: "nofire",
+			confidence: 0
+		},
+		{
+			id: 4,
+			src: "./videos/4.mp4",
+			location: "Ravendale, CA",
+			lat: 40.7979,
+			long: -120.3659,
+			key: "nofire",
+			confidence: 0
+		},
+		{
+			id: 5,
+			src: "./videos/5.mp4",
+			location: "Riverkern, CA",
+			lat: 35.7897,
+			long: -118.4470,
 			key: "nofire",
 			confidence: 0
 		}
@@ -216,6 +246,7 @@ function App() {
 							muted={true}
 							playsInline={true}
 							autoPlay={true}
+							loop={true}
 						/>
 						<p className="stream-location">
 							{source.location} ({formatLat(source.lat)},{" "}
